@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.udacity.stockhawk.data.Contract.Quote;
 
+import java.util.ArrayList;
+
 
 class DbHelper extends SQLiteOpenHelper {
 
@@ -32,7 +34,6 @@ class DbHelper extends SQLiteOpenHelper {
         db.execSQL(builder);
 
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 

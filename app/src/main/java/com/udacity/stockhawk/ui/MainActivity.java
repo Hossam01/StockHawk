@@ -1,6 +1,7 @@
 package com.udacity.stockhawk.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,6 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.InputType;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +35,7 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         SwipeRefreshLayout.OnRefreshListener,
         StockAdapter.StockAdapterOnClickHandler {
-
+Context context1;
     private static final int STOCK_LOADER = 0;
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.recycler_view)
@@ -59,10 +63,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         adapter = new StockAdapter(this, this);
         stockRecyclerView.setAdapter(adapter);
         stockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        stockRecyclerView.addOnItemTouchListener(new  RecyclerItemClickListener(getApplicationContext(), new   RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                // TODO Handle item click
+                Intent intent = new Intent(getBaseContext(), DetailActivity.class);
+
+                TextView tv = (TextView) view.findViewById(R.id.symbol);
+
+                intent.putExtra("SYMBOL", tv.getText().toString());
+                startActivity(intent);
+            }
+        }));
+
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setRefreshing(true);
         onRefresh();
+
+
+
 
         QuoteSyncJob.initialize(this);
         getSupportLoaderManager().initLoader(STOCK_LOADER, null, this);
@@ -129,6 +149,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             PrefUtils.addStock(this, symbol);
             QuoteSyncJob.syncImmediately(this);
         }
+        else if (symbol==null&&symbol.isEmpty()){
+            PrefUtils.removeStock(this, symbol);
+            QuoteSyncJob.syncImmediately(this);
+            Toast.makeText(getApplicationContext(),"non exsist",Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -185,5 +210,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public static void NonActivityClass(Context context) {
+
+        Toast.makeText(context, "mymessage ", Toast.LENGTH_SHORT).show();
     }
 }

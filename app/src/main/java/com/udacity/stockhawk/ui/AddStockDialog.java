@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.udacity.stockhawk.R;
 
@@ -71,6 +72,7 @@ public class AddStockDialog extends DialogFragment {
             ((MainActivity) parent).addStock(stock.getText().toString());
         }
         dismissAllowingStateLoss();
+
     }
 
 
