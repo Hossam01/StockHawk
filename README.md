@@ -10,3 +10,4 @@ If you're a Nanodegree student check your work againt the project [rubric](https
 
 Pull requests gratefully accepted.
 # Stock-Hawk
+# StockHawk
